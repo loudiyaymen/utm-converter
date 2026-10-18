@@ -1,0 +1,18 @@
+# Caddy config for the UTM converter demo.
+# Caddy automatically provisions + renews a Let's Encrypt certificate for this host.
+
+utm.builtbyaymen.com {
+    root * /srv
+    file_server
+    encode gzip zstd
+
+    # Static SPA: no server-side routing needed, but fall back to index.html just in case.
+    try_files {path} /index.html
+
+    # Everything runs client-side; a few sensible headers.
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        -Server
+    }
+}
