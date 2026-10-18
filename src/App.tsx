@@ -16,6 +16,11 @@ import { DICTS, initialLang, initialTheme, type Dict, type Lang, type Theme } fr
 
 const ZONES = Array.from({ length: UTM_ZONE_MAX - UTM_ZONE_MIN + 1 }, (_, i) => i + UTM_ZONE_MIN);
 
+// Fire a named Umami event if the analytics script has loaded (no-op otherwise).
+function track(event: string) {
+  (window as unknown as { umami?: { track?: (e: string) => void } }).umami?.track?.(event);
+}
+
 export default function App() {
   const [lang, setLang] = useState<Lang>(initialLang);
   const [theme, setTheme] = useState<Theme>(initialTheme);
@@ -165,7 +170,7 @@ function SinglePoint({
             <span className="label">{t.longitude}</span>
             <span className="value">{result.lng.toFixed(8)}</span>
           </div>
-          <a className="btn" href={result.mapsUrl} target="_blank" rel="noreferrer">
+          <a className="btn" href={result.mapsUrl} target="_blank" rel="noreferrer" onClick={() => track("maps-click")}>
             {t.viewMaps}
           </a>
         </div>
@@ -197,6 +202,7 @@ function BatchPanel({
 
   function handlePaste() {
     runConversion(parseRows(text));
+    track("convert-batch");
   }
 
   function handleFile(file: File) {
@@ -209,6 +215,7 @@ function BatchPanel({
       const csv = XLSX.utils.sheet_to_csv(sheet);
       setText(csv);
       runConversion(parseRows(csv));
+      track("convert-upload");
     };
     reader.readAsBinaryString(file);
   }
@@ -222,6 +229,7 @@ function BatchPanel({
     a.download = "utm-converted.csv";
     a.click();
     URL.revokeObjectURL(url);
+    track("download-csv");
   }
 
   const okCount = rows.filter((r) => !r.error).length;
