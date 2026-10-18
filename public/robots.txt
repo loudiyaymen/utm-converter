@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://utm.builtbyaymen.com/sitemap.xml

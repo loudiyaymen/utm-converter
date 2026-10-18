@@ -1,4 +1,7 @@
-:root {
+/* Dark is the default palette; [data-theme="light"] overrides it.
+   App.tsx always sets data-theme on <html> (from saved choice or system preference). */
+:root,
+:root[data-theme="dark"] {
   --bg: #0f172a;
   --card: #1e293b;
   --card-2: #273449;
@@ -6,9 +9,24 @@
   --muted: #94a3b8;
   --accent: #38bdf8;
   --accent-2: #0ea5e9;
-  --warn: #7c5a16;
-  --error: #7f1d1d;
+  --on-accent: #06283b;
   --border: #334155;
+  --row-warn: rgba(124, 90, 22, 0.25);
+  --row-error: rgba(127, 29, 29, 0.3);
+}
+
+:root[data-theme="light"] {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --card-2: #f1f5f9;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #0284c7;
+  --accent-2: #0ea5e9;
+  --on-accent: #ffffff;
+  --border: #e2e8f0;
+  --row-warn: rgba(250, 204, 21, 0.22);
+  --row-error: rgba(239, 68, 68, 0.14);
 }
 
 * {
@@ -21,12 +39,37 @@ body {
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.5;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .page {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem 1.25rem 4rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ctrl {
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.7rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ctrl:hover {
+  border-color: var(--accent);
 }
 
 header h1 {
@@ -158,7 +201,7 @@ textarea {
 .btn.solid {
   background: var(--accent-2);
   border-color: var(--accent-2);
-  color: #06283b;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -210,11 +253,11 @@ td a {
 }
 
 .row-warn {
-  background: rgba(124, 90, 22, 0.25);
+  background: var(--row-warn);
 }
 
 .row-error {
-  background: rgba(127, 29, 29, 0.3);
+  background: var(--row-error);
 }
 
 .note-cell {

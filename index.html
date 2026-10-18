@@ -3,8 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UTM &rarr; Google Maps Converter</title>
-    <meta name="description" content="Convert UTM easting/northing to lat/long for Google Maps. Built for Ontario geotechnical fieldwork (NAD83, UTM zones 16N/17N/18N)." />
+
+    <title>UTM to Google Maps Converter — Ottawa / Ontario (NAD83, Zone 18N)</title>
+    <meta
+      name="description"
+      content="Free UTM to latitude/longitude converter for Google Maps. Built for Ontario geotechnical fieldwork — NAD83, UTM zones 16N/17N/18N. Single point, batch paste, and CSV/Excel upload. Bilingual (EN/FR), runs entirely in your browser."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="UTM converter, UTM to lat long, UTM to Google Maps, NAD83, EPSG:26918, UTM zone 18N, Ottawa, Ontario, geotechnical, easting northing, coordinate converter" />
+    <link rel="canonical" href="https://utm.builtbyaymen.com/" />
+
+    <!-- Theme color adapts to light/dark -->
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="UTM → Google Maps Converter (Ontario / NAD83)" />
+    <meta property="og:description" content="Convert UTM easting/northing to lat/long for Google Maps. Zone-aware (16N/17N/18N), NAD83 by default, batch + CSV/Excel. Bilingual EN/FR, 100% in-browser." />
+    <meta property="og:url" content="https://utm.builtbyaymen.com/" />
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:locale:alternate" content="fr_CA" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="UTM → Google Maps Converter (Ontario / NAD83)" />
+    <meta name="twitter:description" content="Convert UTM easting/northing to lat/long for Google Maps. Zone-aware, NAD83, batch + CSV/Excel. Bilingual, in-browser." />
+    <!-- shortcut: no og:image yet — add a 1200x630 PNG at /og.png and reference it here for richer social previews. -->
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Structured data: helps search engines classify the tool -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "UTM to Google Maps Converter",
+        "url": "https://utm.builtbyaymen.com/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (web browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+        "inLanguage": ["en-CA", "fr-CA"],
+        "description": "Convert UTM easting/northing coordinates to latitude/longitude for Google Maps. Zone-aware (UTM 16N/17N/18N), NAD83/WGS84 datums, with single-point, batch-paste, and CSV/Excel import. Built for Ontario geotechnical and surveying fieldwork."
+      }
+    </script>
+
+    <!-- Apply saved/system theme + language before paint to avoid a flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          document.documentElement.dataset.theme = t;
+          var l = localStorage.getItem("lang");
+          if (l !== "en" && l !== "fr") {
+            l = (navigator.language || "").toLowerCase().indexOf("fr") === 0 ? "fr" : "en";
+          }
+          document.documentElement.lang = l;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
