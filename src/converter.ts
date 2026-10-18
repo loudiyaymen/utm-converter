@@ -106,7 +106,12 @@ export function parseRows(text: string): BatchRow[] {
     if (parts.length < 2) continue;
 
     // Find the last two numeric tokens -> easting, northing. Anything before -> id.
-    const nums = parts.map((p) => Number(p.replace(/[^0-9.\-]/g, "")));
+    // A token with no digits strips to "" — treat that as NaN (Number("") is 0, which
+    // would wrongly read a header like "easting,northing" as the point (0, 0)).
+    const nums = parts.map((p) => {
+      const cleaned = p.replace(/[^0-9.\-]/g, "");
+      return cleaned === "" ? NaN : Number(cleaned);
+    });
     // A row where the two trailing tokens aren't numeric is treated as a header and skipped.
     const e = nums[nums.length - 2];
     const n = nums[nums.length - 1];
