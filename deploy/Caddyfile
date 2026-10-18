@@ -1,18 +1,34 @@
-# Caddy config for the UTM converter demo.
-# Caddy automatically provisions + renews a Let's Encrypt certificate for this host.
+# Caddy config (production, on the Contabo VPS).
+# Requires the caddy-ratelimit plugin — build the image from deploy/Dockerfile.
+# Caddy auto-provisions + renews Let's Encrypt certs for both hosts.
+
+{
+    # rate_limit is an HTTP handler; it must be ordered explicitly.
+    order rate_limit before basicauth
+}
 
 utm.builtbyaymen.com {
+    # Per-IP throttle: 120 requests/minute (plenty for humans, blunts scrapers/abuse).
+    rate_limit {
+        zone utm_static {
+            key {remote_host}
+            events 120
+            window 1m
+        }
+    }
     root * /srv
     file_server
     encode gzip zstd
-
-    # Static SPA: no server-side routing needed, but fall back to index.html just in case.
     try_files {path} /index.html
-
-    # Everything runs client-side; a few sensible headers.
     header {
         X-Content-Type-Options nosniff
         Referrer-Policy no-referrer
         -Server
     }
+}
+
+# Self-hosted Umami analytics dashboard (reverse-proxied to the umami-app container).
+analytics.builtbyaymen.com {
+    reverse_proxy umami-app:3000
+    encode gzip zstd
 }

@@ -4,6 +4,16 @@ Serves the UTM converter over HTTPS with an auto-renewing Let's Encrypt cert.
 Caddy serves the static `dist/` files directly and replaces the plain `nginx` container
 (both can't hold port 80, so Caddy takes over 80 **and** 443).
 
+## Current production setup (live)
+- Caddy runs from a **custom image** (`deploy/Dockerfile`) that bundles the rate-limit
+  plugin; build it on the VPS with `docker build -t caddy-ratelimit .` from `deploy/`.
+- Config is `deploy/Caddyfile`: static site at `utm.builtbyaymen.com` (120 req/min/IP
+  rate limit) + reverse proxy for `analytics.builtbyaymen.com` → Umami.
+- **Deploys are automated**: pushing to `main` runs the GitHub Actions workflow
+  (`.github/workflows/ci.yml`) which tests, builds, and rsyncs `dist/` to
+  `/home/<user>/sites/utm-converter/`. The steps below are the original manual path,
+  kept for reference / first-time container setup.
+
 ## Target
 - VPS: `<vps>` → `<VPS_IP>`, user `<user>`
 - Deployed files already at: `/home/<user>/sites/utm-converter`
